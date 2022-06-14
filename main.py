@@ -1,4 +1,4 @@
-#docs: https://discordpy.readthedocs.io/en/stable/
+#docs: https://discordpy.readthedocs.io/en/stable
 import configparser
 import discord
 import os
