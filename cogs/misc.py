@@ -10,14 +10,9 @@ class misc(commands.Cog):
   listylist = ["cortadio", 4, "americano", "italiano"]
   
   def __init__(self, client):
-    self.client = client
-
-  @commands.command()
-  async def coffee(self, ctx):
-    await ctx.send(f"Here's a cup of {self.listylist[random.randint(0,3)]} ☕")
-    
+    self.client = client  
   
-  @commands.command()
+  @commands.command(help="Hurl slurs at the user.", short="The antichrist.")
   async def curseatme(self,ctx):
     await ctx.send(f"{data[random.randint(0,len(data))]}")
 
