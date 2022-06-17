@@ -4,7 +4,6 @@ import discord
 import os
 import logging
 from discord.ext import commands
-from pretty_help import DefaultMenu, PrettyHelp
 
 #Load configurations
 logging.basicConfig(level=logging.INFO)

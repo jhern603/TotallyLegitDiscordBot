@@ -15,23 +15,27 @@ class roles(commands.Cog):
 
     @commands.command(name="removerole", aliases=['takeroles', 'removeroles'], help="Takes away a role from a user", short="Take role from user")
     async def removerole(self, ctx, user: discord.User, *roles):
-        user_roles = user.roles
-        if len(roles) == 0:
-            await ctx.send(f"You have called $removerole but didn't pass what roles to remove!")
-            return
-        if len(str(user)) == 0:
-            await ctx.send(f"You have called $removerole but didn't pass what user to remove roles from!")
-            return
-        if len(user_roles) <= 1:
-            await ctx.send(f"{str(user)} doesn't have any roles!")
-            return
-        for role in user_roles:
-            if str(role) != "@everyone":
-                if(str(role) in roles):
-                    await ctx.send(f"Removed the following roles from {str(user)}:")
-                    await ctx.send(f"\t{role}")
-                    await user.remove_roles(role)
-                    logging.info(f"Removed{role} from {str(user)}")
+        mod_role = ctx.guild.get_role(812013182415274005)
+        if mod_role in ctx.author.roles:
+            user_roles = user.roles
+            if len(roles) == 0:
+                await ctx.send(f"You have called $removerole but didn't pass what roles to remove!")
+                return
+            if len(str(user)) == 0:
+                await ctx.send(f"You have called $removerole but didn't pass what user to remove roles from!")
+                return
+            if len(user_roles) <= 1:
+                await ctx.send(f"{str(user)} doesn't have any roles!")
+                return
+            for role in user_roles:
+                if str(role) != "@everyone":
+                    if(str(role) in roles):
+                        await ctx.send(f"Removed the following roles from {str(user)}:")
+                        await ctx.send(f"\t{role}")
+                        await user.remove_roles(role)
+                        logging.info(f"Removed{role} from {str(user)}")
+        else:
+            await ctx.send("You must be a moderator to run this command!")
 
     @commands.command(help="List all roles in the server", short="List roles")
     async def getroles(self, ctx):
