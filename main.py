@@ -11,7 +11,7 @@ config = configparser.ConfigParser()
 config.read('.conf')
 
 #Bot settings
-prefix = "$"
+prefix = ">"
 activity = discord.Game("Life")
 bot_log_channel_ID = 873247206617006160
 
@@ -33,15 +33,15 @@ class OraBot(discord.Client):
                 logging.info(f'Loaded cog: {file[:-3]}')
         client.run(config['ORABOT']['TOKEN'])
 
-    @client.command(help="Load a new cog.", short="Load cog.")
+    @client.command(hidden=True, help="Load a new cog.", short="Load cog.")
     async def load(self, extension):
         client.load_extension(f'cogs.{extension}')
 
-    @client.command(help="Unload a cog.", short="Unload cog.")
+    @client.command(hidden=True, help="Unload a cog.", short="Unload cog.")
     async def unload(self, extension):
         client.unload_extension(f'cogs.{extension}')
 
-    @client.command(help="Reload all cogs.", short="Reload cog.")
+    @client.command(hidden=True, help="Reload all cogs.", short="Reload cog.")
     async def reload(self):
         for file in os.listdir('./cogs'):
             if file.endswith('.py'):
@@ -49,7 +49,7 @@ class OraBot(discord.Client):
                 logging.info(f'Reloaded cog: {file[:-3]}')
         await self.channel.send("Cogs reloaded!")
 
-    @client.command(help="Lists all cogs.", short="List cogs.")
+    @client.command(hidden=True, help="Lists all cogs.", short="List cogs.")
     async def listcogs(self):
         for file in os.listdir('./cogs'):
             if file.endswith('.py'):
