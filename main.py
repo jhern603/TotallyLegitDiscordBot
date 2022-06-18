@@ -9,21 +9,20 @@ from discord.ext import commands
 logging.basicConfig(level=logging.INFO)
 config = configparser.ConfigParser()
 config.read('.conf')
-
-#Bot settings
-prefix = ">"
-activity = discord.Game("Life")
-bot_log_channel_ID = 873247206617006160
+bot_settings=configparser.ConfigParser()
+bot_settings.read('settings.conf')
+settings_profile='DEFAULT'
 
 #Initialize bot
-client = commands.Bot(command_prefix=prefix, 
-                      activity=activity,
-                      description="This is the unofficial official bot for the Oracle interns server!", 
-                      help_command=None)
-client.remove_command('help')
-
+client = commands.Bot(command_prefix=bot_settings[settings_profile]['command_prefix'],
+                      activity=discord.Game(bot_settings[settings_profile]['activity']),
+                      description=bot_settings[settings_profile]['description']
+                      )
+#help_command=None
+# client.remove_command('help')
 class OraBot(discord.Client):
-    channel = client.get_channel(bot_log_channel_ID)
+    channel = client.get_channel(
+        int(bot_settings[settings_profile]['bot_log_channel_id']))
     logging.info("Starting...")
 
     def __init__(self):
@@ -55,35 +54,35 @@ class OraBot(discord.Client):
             if file.endswith('.py'):
                 await self.channel.send(f"cog: {file[:-3]}")
 
-    @client.command()
-    async def help(ctx, args=None):
-        help_embed = discord.Embed(title="Help!")
-        command_names_list = [x.name for x in client.commands]
+    # @client.command()
+    # async def help(ctx, args=None):
+    #     help_embed = discord.Embed(title="Help!")
+    #     command_names_list = [x.name for x in client.commands]
 
-        # If there are no arguments, just list the commands:
-        if not args:
-            help_embed.add_field(
-                name="List of supported commands:",
-                value="\n".join([str(i+1)+". "+x.name for i,
-                                x in enumerate(client.commands)]),
-                inline=False
-            )
-            help_embed.add_field(
-                name="Details",
-                value=f"Type `{prefix}help <command name>` for more details about each command.",
-                inline=False
-            )
-        elif args in command_names_list:
-            help_embed.add_field(
-                name=args,
-                value=client.get_command(args).help
-            )
-        else:
-            help_embed.add_field(
-                name="Nope.",
-                value="Don't think I got that command, boss!"
-            )
-        await ctx.send(embed=help_embed)
+    #     # If there are no arguments, just list the commands:
+    #     if not args:
+    #         help_embed.add_field(
+    #             name="List of supported commands:",
+    #             value="\n".join([str(i+1)+". "+x.name for i,
+    #                             x in enumerate(client.commands)]),
+    #             inline=False
+    #         )
+    #         help_embed.add_field(
+    #             name="Details",
+    #             value=f"Type `{bot_settings['DEFAULT']['command_prefix']}help <command name>` for more details about each command.",
+    #             inline=False
+    #         )
+    #     elif args in command_names_list:
+    #         help_embed.add_field(
+    #             name=args,
+    #             value=client.get_command(args).help
+    #         )
+    #     else:
+    #         help_embed.add_field(
+    #             name="Nope.",
+    #             value="Don't think I got that command, boss!"
+    #         )
+    #     await ctx.send(embed=help_embed)
 
     # Error Handling
     @load.error
@@ -108,7 +107,7 @@ class OraBot(discord.Client):
             logging.info(f'Connected to guild: {guild.name}')
         logging.info('Orabot connected!')
         logging.info(
-            f"Bot log hooked to {client.get_channel(bot_log_channel_ID)}")
+            f"Bot log hooked to {client.get_channel(int(bot_settings[settings_profile]['bot_log_channel_id']))}")
 
 
 if __name__ == '__main__':
